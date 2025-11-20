@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b936b4e51b8e4444999676467410243, type: 3}
+  m_Name: PlayerObjectData
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerObjectData
+  groundDashSmoke: {fileID: 2505883353728916988, guid: 210d19af34974864bb27e52e006df6fd, type: 3}
+  groundSmoke: {fileID: 8911053866604990595, guid: ff796164409414943ab1cb0c68383612, type: 3}
+  airDashEffect: {fileID: 6621284858065757294, guid: fab16ae8a478a4247b4ad26b4d27b50b, type: 3}
+  airJumpEffect: {fileID: 1179639150159716552, guid: e70d2f938738e7046a5a734c932e28d4, type: 3}
