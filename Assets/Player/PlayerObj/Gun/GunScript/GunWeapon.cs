@@ -84,12 +84,10 @@ public abstract class GunWeapon : MonoBehaviour
 
     public virtual void DefaultShoot(float rotZ)
     {
-
-        
-
         for (int i = 1; i <= gunData.bulletCount + plusBullet; i++)
         {
-            bulletStat.BulletForce(Mathf.Round(Random.Range(gunData.bulletForce / 0.75f, gunData.bulletForce)));
+            if(gunData.IamShootGun) bulletStat.BulletForce(Random.Range(gunData.bulletForce / 0.75f, gunData.bulletForce));
+            else bulletStat.BulletForce(gunData.bulletForce);
 
 
             float randomRot = Random.Range(-gunData.bulletBounce, gunData.bulletBounce);
@@ -131,7 +129,7 @@ public abstract class GunWeapon : MonoBehaviour
         }
     }
 
-
+    
 
 
 

@@ -18,11 +18,7 @@ public class TestBulletScript : MonoBehaviour
     {
         while(true)
         {
-            float currentDistance = Vector2.Distance
-                                            (
-                                                startPosition,
-                                                transform.position
-                                            );
+            float currentDistance = Vector2.Distance(startPosition, transform.position);
 
             if (currentDistance >= delDistance) Destroy(gameObject);
             yield return new WaitForSeconds(0.1f);

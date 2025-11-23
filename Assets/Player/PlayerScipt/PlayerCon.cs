@@ -40,7 +40,7 @@ public class PlayerCon : MonoBehaviour
 
     private bool isFacingRight;
     private bool isTestHoriSave; //호리존탈 저장
-    public  int  horiSave = 1;
+    public  float  horiSave = 1;
 
     [Space(10)]
 
@@ -105,12 +105,13 @@ public class PlayerCon : MonoBehaviour
 
         if (isDashing)
         {
-            float dashMyDistance = Vector3.Distance(dashPosition, transform.position);
-            rb.linearVelocity    = new Vector2(playerStat.dashForce * -horiSave, -1f);
+            float curDashDistance = Vector3.Distance(dashPosition, transform.position);
+            rb.linearVelocity    = new Vector2(playerStat.dashForce * horiSave, -1f);
 
-            if (dashMyDistance >= playerStat.dashDistance)
+            if (curDashDistance >= playerStat.dashDistance)
             {
                 StartCoroutine(DashCoolTime());
+                isDashing = false;
             }
 
             else return;
@@ -139,7 +140,7 @@ public class PlayerCon : MonoBehaviour
     {
         if (context.started)
         {
-            if (playerStat.jumpCnt > 1 && !isDashing)
+            if (playerStat.jumpCnt > 0 && !isDashing)
             {
                 _move.Jump(playerStat.jumpForce);
                 playerStat.jumpCnt--;
@@ -189,7 +190,7 @@ public class PlayerCon : MonoBehaviour
         || (!isTestHoriSave && _input.horizontal() > 0))
         {
             isTestHoriSave = !isTestHoriSave;
-            horiSave *= -1;
+            horiSave = _input.horizontal();
         }
     }
 
@@ -201,14 +202,17 @@ public class PlayerCon : MonoBehaviour
         currentState?.OnStateEnter();
     }
 
-    public void OnDash()
+    public void OnDash(InputAction.CallbackContext context)
     {
-        if (canDash)
+        if(context.started)
         {
-            isDashing = true;
-            canDash   = false;
-            dashPosition = transform.position;
+            if (canDash)
+            {
+                isDashing = true;
+                canDash = false;
+                dashPosition = transform.position;
 
+            }
         }
 
     }
@@ -227,7 +231,7 @@ public class PlayerCon : MonoBehaviour
             groundSmoke.gameObject.transform.localScale 
             = new Vector3
               (
-                  -horiSave,                             //X
+                  horiSave,                             //X
                   groundDashSmoke.transform.localScale.x,//Y
                   groundDashSmoke.transform.localScale.z //Z
               );
@@ -245,7 +249,7 @@ public class PlayerCon : MonoBehaviour
             airSmoke.gameObject.transform.localScale 
             = new Vector3
               (
-                  -horiSave,                          //X
+                  horiSave,                          //X
                   airSmoke.transform.localScale.x,    //Y
                   airSmoke.transform.localScale.z     //Z
               );
@@ -255,7 +259,6 @@ public class PlayerCon : MonoBehaviour
     public IEnumerator DashCoolTime()
     {
         dashCooltiming = true;
-        isDashing      = false;
         
         yield return new WaitForSeconds(playerStat.dashCoolTime);
 

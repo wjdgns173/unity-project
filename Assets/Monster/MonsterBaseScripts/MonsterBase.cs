@@ -114,19 +114,9 @@ public abstract class MonsterBase : MonoBehaviour
 
     public virtual void Attack() //플레이어 떄렸다고  //애니메이션으로 관리
     {
-        RaycastHit2D a =
-            Physics2D.BoxCast
-                    (
-                        AttackHitBox.position, AttackHitBoxSize,
-                        0f, 
-                        LocalX(),
-                        boxDistance, playerLayer
-                    );
-
-        bool playerHit = a.collider != null;
-        if (playerHit)
+        if(PlayerInAttackHitBox())
         {
-            Debug.Log("플레이어 줘팸");
+            Debug.Log("플레이어 때림");
             PlayerManager.instance.Damage(monsterData.attackDamage);
         }
     }

@@ -53,10 +53,6 @@ public abstract class BaseWeaponControl : MonoBehaviour
     #region "재장전"
     public virtual void Reload()
     {
-        /*if(canReload())
-        {
-            StartCoroutine(Reloading());
-        }*/
 
         foreach(var _reloadCheck in reloadCheck)
         {
@@ -143,5 +139,6 @@ public abstract class BaseWeaponControl : MonoBehaviour
     }
 
 
+    
 
 }

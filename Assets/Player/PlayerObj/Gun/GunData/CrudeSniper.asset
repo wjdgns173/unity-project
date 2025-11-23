@@ -21,7 +21,7 @@ MonoBehaviour:
   MaxBullet: 120
   MaxAmmo: 7
   ReloadTime: 2
-  GlobalShakeForce: 0.25
+  GlobalShakeForce: 0.1
   shootAnimeName: Test
   reloadAnimeName: Teee
   currentBullet: 120

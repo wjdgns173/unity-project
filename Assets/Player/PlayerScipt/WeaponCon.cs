@@ -10,24 +10,22 @@ public class WeaponCon : MonoBehaviour
     static public WeaponCon instance;
 
     public GunWeapon thisWeapon;
-
-    private Camera  mainCam;
-    public  Vector3 mousePos;
-
-    public  float rotZ = 0f;
-
-    public TextMeshProUGUI CurrentAmmoText;
-
     public bool wantShoot;
 
     public int curSlot
     {
-        get {return MyInventory.instance.currentSlot;}
+        get { return MyInventory.instance.currentSlot; }
     }
     public int lastSlot = 0;
 
+    public float rotZ = 0f;
+
+    private Camera  mainCam;
+    public  Vector3 mousePos;
+
     public Image gunImage;
 
+    public TextMeshProUGUI CurrentAmmoText;
     public Slider reloadingSlier;
     /* public TextMeshProUGUI GunNameText;
      public TextMeshProUGUI CurrentAmmoText;
@@ -56,10 +54,7 @@ public class WeaponCon : MonoBehaviour
             WeaponChange();
             lastSlot = curSlot;
 
-            Sprite weaponSprite = thisWeapon.mySprite.sprite;
-            gunImage.sprite     = weaponSprite;
-
-            thisWeapon.myWeaponCon.ChangeWait();
+            
         }
 
         if (thisWeapon != null)
@@ -146,7 +141,14 @@ public class WeaponCon : MonoBehaviour
     {
         GunWeapon newWeapon = MyInventory.instance.myInventory[curSlot].myWeaponScript;
         thisWeapon = newWeapon;
-        
+
+        thisWeapon.myWeaponCon.ChangeWait();
+    }
+
+    public void WeaponSpriteChange()
+    {
+        Sprite weaponSprite = thisWeapon.mySprite.sprite;
+        gunImage.sprite = weaponSprite;
     }
 
 

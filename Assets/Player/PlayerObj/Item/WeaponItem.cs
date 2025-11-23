@@ -6,6 +6,12 @@ public class WeaponItem : MonoBehaviour
     public BaseWeaponControl mainWeapon;
     bool canPickUp;
 
+    void Awake()
+    {
+        mainWeapon.isReloading = false;
+        mainWeapon.myWeaponScript.TestFire.SetActive(false);
+    }
+
     void Start()
     {
         
@@ -13,23 +19,21 @@ public class WeaponItem : MonoBehaviour
 
     void Update()
     {
-        if(canPickUp && PlayerInput.instance.getPickUp)
-        {
-            if(mainWeapon == null)
-            {
-                mainWeapon = gameObject.GetComponent<BaseWeaponControl>();
-            } 
-            MyInventory.instance.AddWeapon(mainWeapon);
-            this.enabled = false;
-            gameObject.GetComponent<Collider2D>().enabled = false;
-        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.layer == 8)
         {
-            canPickUp = true;
+            MyInventory.instance.newWeapon = mainWeapon;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 8)
+        {
+            MyInventory.instance.newWeapon = mainWeapon;
         }
     }
 
@@ -37,7 +41,7 @@ public class WeaponItem : MonoBehaviour
     {
         if (collision.gameObject.layer == 8)
         {
-            canPickUp = false;
+            MyInventory.instance.newWeapon = null;
         }
     }
 }

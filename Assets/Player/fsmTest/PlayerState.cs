@@ -10,6 +10,12 @@ public abstract class PlayerState
     public virtual void OnSteteUpdate() { }
     public virtual void OnStateExite()  { }
 
+    public bool IamAir      => !player._move.isGrounded();
+    public bool IamMove     => player._input.horizontal() != 0;
+    public bool IamStay     => player._input.horizontal()  == 0;
+    public bool IamDashing  => player.isDashing;
+    public bool IamGrounded => player._move.isGrounded();
+
     public class Idle : PlayerState
     {
         public Idle(PlayerCon player) : base(player) { }
@@ -18,21 +24,19 @@ public abstract class PlayerState
         
         public override void OnSteteUpdate()
         {
-            if (player._input.horizontal() != 0) player.ChangeState(player.moveState);
+            if (IamMove) player.ChangeState(player.moveState);
 
-            if (!player._move.isGrounded())
+            if (IamAir)
             {
                 player.ChangeState(player.jumpState);
             }
-            if(player.isDashing)
+            if(IamDashing)
             {
                 player.ChangeState(player.dashingState);
             }
         }
 
-        public override void OnStateExite()
-        {
-        }
+        public override void OnStateExite() {}
 
         
     }
@@ -44,23 +48,21 @@ public abstract class PlayerState
         public override void OnStateEnter() => player.anime.Play("PlayerRun");
         
 
-        public override void OnStateExite()
-        {
-        }
+        public override void OnStateExite() {}
 
         public override void OnSteteUpdate()
         {
 
-            if (Mathf.Abs(player._input.horizontal()) <= 0)
+            if (IamStay)
             {
                 player.ChangeState(player.idleState);
             }
 
-            if (!player._move.isGrounded())
+            if (IamAir)
             {
                 player.ChangeState(player.jumpState);
             }
-            if (player.isDashing)
+            if (IamDashing)
             {
                 player.ChangeState(player.dashingState);
             }
@@ -74,26 +76,18 @@ public abstract class PlayerState
 
         public Vector3 dashPosition;
 
-        public override void OnStateEnter()
-        {
-            
-            player.DashSmoke();
-        }
+        public override void OnStateEnter() => player.DashSmoke();
 
-
-        public override void OnStateExite()
-        {
-            
-        }
+        public override void OnStateExite() {}
 
         public override void OnSteteUpdate()
         {
 
-            if (!player.isDashing)
+            if (!IamDashing)
             {
-                if (player._move.isGrounded())
+                if (IamGrounded)
                 {
-                    if (player._input.horizontal() != 0)
+                    if (IamMove)
                     {
                         player.ChangeState(player.moveState);
                     }
@@ -103,7 +97,7 @@ public abstract class PlayerState
 
                     }
                 }
-                if (!player._move.isGrounded())
+                if (IamAir)
                 {
                     player.ChangeState(player.jumpState);
                 }
@@ -116,26 +110,21 @@ public abstract class PlayerState
     {
         public Jump(PlayerCon player) : base(player) { }
 
-        public override void OnStateEnter()
-        {
-            player.anime.Play("PlayerJumping");
-        }
+        public override void OnStateEnter() => player.anime.Play("PlayerJumping");
 
-        public override void OnStateExite()
-        {
-        }
+        public override void OnStateExite(){}
 
         public override void OnSteteUpdate()
         {
 
-            if (player.isDashing)
+            if (IamDashing)
             {
                 player.ChangeState(player.dashingState);
             }
 
-            if (player._move.isGrounded())
+            if (IamGrounded)
             {
-                if (player._input.horizontal() != 0)
+                if (IamMove)
                 {
                     player.ChangeState(player.moveState);
                 }

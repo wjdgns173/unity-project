@@ -3,16 +3,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MyInventory : MonoBehaviour
-{   
+{
+    public static MyInventory instance;
 
+    public BaseWeaponControl newWeapon;
 
     public List<BaseWeaponControl> myInventory = new List<BaseWeaponControl>(4)
     {
         
     };
-
-    public static MyInventory instance;
-
+    
     public int currentSlot = 0;
 
     void Awake()
@@ -45,73 +45,76 @@ public class MyInventory : MonoBehaviour
             myInventory[currentSlot].weaponObj.SetActive(true);
             
             WeaponCon.instance.thisWeapon = myInventory[currentSlot].myWeaponScript;
+            WeaponCon.instance.WeaponSpriteChange();
 
-            
 
         }
 
 
     }
 
-    public void AddWeapon(BaseWeaponControl weapon)
-    {
-        
-        if(weapon == null)
+
+    public  void AddWeapon(InputAction.CallbackContext context)
+    {   
+        if(context.started)
         {
-            Debug.LogWarning("MI_AddWeapon에서 weapon이 읎다 ");
-            return;
-        }
-
-        Vector3 localScale = weapon.weaponObj.transform.localScale;
-
-        if (myInventory.Count < 4)
-        {
-            weapon.gameObject.transform.SetParent(PlayerCon.instance.GunPosition.transform);
-
-            Debug.Log("줍줍");
-
-            myInventory.Add(weapon);
-            currentSlot = myInventory.Count - 1;
-
-        }
-        else //임시 아이템 교체
-        {
-
-            GameObject FallItem = Instantiate
-            (
-                myInventory[currentSlot].gameObject,
-                weapon.transform.position,
-                Quaternion.identity
-            );
-
-            FallItem.gameObject.GetComponentInChildren<GunWeapon>().TestFire.SetActive(false);
-            FallItem.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-            FallItem.gameObject.GetComponent<WeaponItem>().enabled = true;
-            
+            if (newWeapon == null)
+            {
+                Debug.LogWarning("MI_AddWeapon에서 weapon이 읎다 ");
+                return;
+            }
 
 
-            Destroy(myInventory[currentSlot].gameObject);
-            myInventory.RemoveAt(currentSlot);
+            Vector3 localScale = newWeapon.weaponObj.transform.localScale;
 
+            if (myInventory.Count < 4)
+            {
+                newWeapon.gameObject.transform.SetParent(PlayerCon.instance.GunPosition.transform);
 
-            myInventory.Add(weapon); 
+                Debug.Log("줍줍");
 
-            weapon.transform.parent = PlayerCon.instance.GunPosition.transform;
-            weapon.myWeaponScript.myWeaponCon.fireWait = false;
+                myInventory.Add(newWeapon);
+                currentSlot = myInventory.Count - 1;
 
-            Debug.Log("줍줍");
-            currentSlot = myInventory.Count - 1;
-        }
+            }
+            else //임시 아이템 교체
+            {
 
-        WeaponCon.instance.thisWeapon = weapon.myWeaponScript;
+                BaseWeaponControl oldWeapon = myInventory[currentSlot];
 
-        weapon.transform.localScale    = localScale;
-        weapon.transform.localPosition = Vector3.zero;
-        weapon.transform.localRotation = Quaternion.identity;
+                GameObject FallItem = Instantiate
+                (
+                    oldWeapon.gameObject,
+                    newWeapon.transform.position,
+                    Quaternion.identity
+                );
 
-        foreach (var item in myInventory)
-        {
-            item.weaponObj.SetActive(item == myInventory[currentSlot]);
+                FallItem.GetComponent<BoxCollider2D>().enabled = true;
+                FallItem.GetComponent<WeaponItem>().enabled = true;
+
+                Destroy(myInventory[currentSlot].gameObject);
+                myInventory.RemoveAt(currentSlot);
+
+                myInventory.Add(newWeapon);
+
+                newWeapon.transform.parent = PlayerCon.instance.GunPosition.transform;
+                newWeapon.myWeaponScript.myWeaponCon.fireWait = false;
+
+                Debug.Log("줍줍");
+                currentSlot = myInventory.Count - 1;
+            }
+
+            newWeapon.transform.localScale = localScale;
+            newWeapon.transform.localPosition = Vector3.zero;
+            newWeapon.transform.localRotation = Quaternion.identity;
+
+            WeaponCon.instance.thisWeapon = newWeapon.myWeaponScript;
+            WeaponCon.instance.WeaponSpriteChange();
+
+            foreach (var item in myInventory)
+            {
+                item.weaponObj.SetActive(item == myInventory[currentSlot]);
+            }
         }
 
     }
