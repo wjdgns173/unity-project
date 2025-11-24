@@ -141,8 +141,7 @@ public class WeaponCon : MonoBehaviour
     {
         GunWeapon newWeapon = MyInventory.instance.myInventory[curSlot].myWeaponScript;
         thisWeapon = newWeapon;
-
-        thisWeapon.myWeaponCon.ChangeWait();
+        StartCoroutine(PlayerCon.instance.WeaponChangeWait());
     }
 
     public void WeaponSpriteChange()

@@ -65,6 +65,7 @@ public class PlayerCon : MonoBehaviour
 
     [Space(10)]
 
+    public bool changeWait;
 
     public float dashMyDistance = 0;
 
@@ -111,7 +112,6 @@ public class PlayerCon : MonoBehaviour
             if (curDashDistance >= playerStat.dashDistance)
             {
                 StartCoroutine(DashCoolTime());
-                isDashing = false;
             }
 
             else return;
@@ -259,6 +259,7 @@ public class PlayerCon : MonoBehaviour
     public IEnumerator DashCoolTime()
     {
         dashCooltiming = true;
+        isDashing = false;
         
         yield return new WaitForSeconds(playerStat.dashCoolTime);
 
@@ -281,17 +282,19 @@ public class PlayerCon : MonoBehaviour
         }
     }
 
+
     void OnCollisionStay2D(Collision2D collision)
     {
+        if (isDashing)
+        {
+            if (!dashCooltiming)
+            {
+                StartCoroutine(DashCoolTime());
+            }
+        }
         if (collision.gameObject.layer == 7)
         {
-            if (isDashing)
-            {
-                if (!dashCooltiming)
-                {
-                    StartCoroutine(DashCoolTime());
-                }
-            }
+            
         }
     }
 
@@ -306,6 +309,13 @@ public class PlayerCon : MonoBehaviour
 
         sp.material = original;
         isFlashing  = false;
+    }
+
+    public IEnumerator WeaponChangeWait()
+    {
+        changeWait = true;
+        yield return new WaitForSeconds(0.1f);
+        changeWait = false;
     }
 
 
