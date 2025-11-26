@@ -42,6 +42,8 @@ public class MyInventory : MonoBehaviour
 		{
 			FullAddWeapon(Weapon,Grade);
 		}
+		WeaonSetParent(Weapon,PlayerCon.instance.weaponParent); //**// 중요 
+		
 	}
 		
 
@@ -57,16 +59,29 @@ public class MyInventory : MonoBehaviour
 
 	public FullAddWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
 	{
-		BaaseWeaponCon curSlotItem = WeaponInventory[curSlot];
+		BaaseWeaponCon curSlotWeapon = WeaponInventory[curSlot];
 		
 		GameObject fallItem =  Instantiate(FallWeapon, transform.position, Quaternion.identity);
 		fallItem.getcomponent<WeaponItem>().enable = true;
 		fallItem.getcomponent<BoxColdier2d>().enable = true;
 
 		WeaponInventory.RemoveAt(curslot);
+		Destroy(curSlotWeapon.gameObject);
 
 		AddWeapon(Weapon,Grade);
 	}
+
+	public void WeaonSetParent(GameObject weaponObj, Transform parent)
+	{
+		Vector3 = weaponObj.transform.localScale;
+		
+		weaponObj.SetParent(parent);
+
+		weaponObj.transform.localScale = localScale;
+           	weaponObj.transform.localPosition = Vector3.zero;
+            	weaponObj.transform.localRotation = Quaternion.identity;
+	}
+		
 
 }
 
