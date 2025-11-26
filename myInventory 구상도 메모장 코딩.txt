@@ -35,7 +35,7 @@ public class MyInventory : MonoBehaviour
  
 	public GetWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
 	{
-		if(WeaponInventory.Count < 3)
+		if(WeaponInventory.Count < 4)
 		{
 			AddWeapon(Weapon,Grade);
 		}
@@ -63,8 +63,8 @@ public class MyInventory : MonoBehaviour
 		BaseWeaponCon curSlotWeapon = WeaponInventory[curSlot];
 		
 		GameObject fallItem =  Instantiate(FallWeapon, transform.position, Quaternion.identity);
-		fallItem.getcomponent<IamItem>().enable = true;
-		fallItem.getcomponent<Collider2D>().enable = true;
+		fallItem.getcomponent<IamItem>().enabled = true;
+		fallItem.getcomponent<Collider2D>().enabled = true;
 
 		WeaponInventory.RemoveAt(curslot);
 		Destroy(curSlotWeapon.gameObject);
