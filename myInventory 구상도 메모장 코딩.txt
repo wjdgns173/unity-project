@@ -8,6 +8,7 @@ public enum WeaponGrade
 	Mythic,  //신ㄴ화
 }
 
+[System.Serializable]
 public class WeaponItem 
 {
 	public BaseWeaponCon Weapon;
@@ -23,7 +24,7 @@ public class WeaponItem
 public class MyInventory : MonoBehaviour
 {
 
-	public list<WeaponItem>() WeaponInventory = new lsit<WeaponItem>(4)
+	public List<WeaponItem>() WeaponInventory = new List<WeaponItem>(4)
 	{
 
 	};
@@ -57,13 +58,13 @@ public class MyInventory : MonoBehaviour
 		
 	}
 
-	public FullAddWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
+	public void FullAddWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
 	{
-		BaaseWeaponCon curSlotWeapon = WeaponInventory[curSlot];
+		BaseWeaponCon curSlotWeapon = WeaponInventory[curSlot];
 		
 		GameObject fallItem =  Instantiate(FallWeapon, transform.position, Quaternion.identity);
-		fallItem.getcomponent<WeaponItem>().enable = true;
-		fallItem.getcomponent<BoxColdier2d>().enable = true;
+		fallItem.getcomponent<IamItem>().enable = true;
+		fallItem.getcomponent<Collider2D>().enable = true;
 
 		WeaponInventory.RemoveAt(curslot);
 		Destroy(curSlotWeapon.gameObject);
@@ -75,7 +76,7 @@ public class MyInventory : MonoBehaviour
 	{
 		Vector3 = weaponObj.transform.localScale;
 		
-		weaponObj.SetParent(parent);
+		weaponObj.transform.SetParent(parent);
 
 		weaponObj.transform.localScale = localScale;
            	weaponObj.transform.localPosition = Vector3.zero;
