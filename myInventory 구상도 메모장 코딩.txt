@@ -1,0 +1,94 @@
+public enum WeaponGrade
+{
+	None,   //없음
+	Default, //보통
+	Rare,  //레어
+	Epic, //에픽
+	Legend,  //전설
+	Mythic,  //신ㄴ화
+}
+
+public class WeaponItem 
+{
+	public BaseWeaponCon Weapon;
+	public WeaponGrade Grade;
+	
+	public WeaponItem(BaseWeaponCon weapon, WeaponGrade grade)
+	{
+		Weapon = weapon;
+		Grade = grade;
+	}
+}
+
+public class MyInventory : MonoBehaviour
+{
+
+	public list<WeaponItem>() WeaponInventory = new lsit<WeaponItem>(4)
+	{
+
+	};
+
+	public int curSlot = 0;
+
+
+
+	public GetWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
+	{
+		if(WeaponInventory.Count < 3)
+		{
+			AddWeapon(Weapon,Grade);
+		}
+		else
+		{
+			FullAddWeapon(Weapon,Grade);
+		}
+	}
+		
+
+	public AddWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
+	{
+		WeaponItem newWeapon = new WeaponItem(Weapon, Grade);	
+		WeaponInventory.Add(newWeapon);
+
+		WeaponInventory[curSlot].WeaponObj.setActive(false);
+
+		
+	}
+
+	public FullAddWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
+	{
+		BaaseWeaponCon curSlotItem = WeaponInventory[curSlot];
+		
+		GameObject fallItem =  Instantiate(FallWeapon, transform.position, Quaternion.identity);
+		fallItem.getcomponent<WeaponItem>().enable = true;
+		fallItem.getcomponent<BoxColdier2d>().enable = true;
+
+		WeaponInventory.RemoveAt(curslot);
+
+		AddWeapon(Weapon,Grade);
+	}
+
+}
+
+
+
+		
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
