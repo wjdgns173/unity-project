@@ -24,7 +24,7 @@ public class WeaponItem
 public class MyInventory : MonoBehaviour
 {
 
-	public List<WeaponItem>() WeaponInventory = new List<WeaponItem>(4)
+	public List<WeaponItem> WeaponInventory = new List<WeaponItem>(4)
 	{
 
 	};
