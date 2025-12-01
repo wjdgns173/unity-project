@@ -10,7 +10,6 @@ public abstract class BaseWeaponControl : MonoBehaviour
     public Animator anime;
 
     public bool fireWait;     //총 발사속도 제어
-    public bool changeWait;   //무기 교체시 대기시간
     public bool isReloading;  //나는 장전중이다 
 
 
@@ -43,7 +42,8 @@ public abstract class BaseWeaponControl : MonoBehaviour
                     myWeaponScript.gunData.currentAmmo > 0 &&
                     !isReloading && 
                     !fireWait &&
-                    !changeWait
+                    !PlayerCon.instance.changeWait
+                    
                 );
     }
 
@@ -117,21 +117,7 @@ public abstract class BaseWeaponControl : MonoBehaviour
     #endregion
 
 
-    public void ChangeWait()
-    {
-        if(!changeWait)
-        {
-            StartCoroutine(ChangeWaiting());
-        }
-        
-    }
 
-    public IEnumerator ChangeWaiting()
-    {
-        changeWait = true;
-        yield return new WaitForSeconds(0.1f);
-        changeWait = false;
-    }
 
     public void AnimePlay(string animeName)
     {

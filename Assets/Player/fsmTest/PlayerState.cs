@@ -12,7 +12,7 @@ public abstract class PlayerState
 
     public bool IamAir      => !player._move.isGrounded();
     public bool IamMove     => player._input.horizontal() != 0;
-    public bool IamStay     => player._input.horizontal()  == 0;
+    public bool IamStay     => player._input.horizontal() == 0;
     public bool IamDashing  => player.isDashing;
     public bool IamGrounded => player._move.isGrounded();
 

@@ -1,0 +1,110 @@
+public enum WeaponGrade
+{
+	None,   //없음
+	Default, //보통
+	Rare,  //레어
+	Epic, //에픽
+	Legend,  //전설
+	Mythic,  //신ㄴ화
+}
+
+[System.Serializable]
+public class WeaponItem 
+{
+	public BaseWeaponCon Weapon;
+	public WeaponGrade Grade;
+	
+	public WeaponItem(BaseWeaponCon weapon, WeaponGrade grade)
+	{
+		Weapon = weapon;
+		Grade = grade;
+	}
+}
+
+public class MyInventory : MonoBehaviour
+{
+
+	public List<WeaponItem> WeaponInventory = new List<WeaponItem>(4)
+	{
+
+	};
+
+	public int curSlot = 0;
+
+
+ 
+	public GetWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
+	{
+		if(WeaponInventory.Count < 4)
+		{
+			AddWeapon(Weapon,Grade);
+		}
+		else
+		{
+			FullAddWeapon(Weapon,Grade);
+		}
+		WeaonSetParent(Weapon,PlayerCon.instance.weaponParent); //**// 중요 
+		
+	}
+		
+
+	public AddWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
+	{
+		WeaponItem newWeapon = new WeaponItem(Weapon, Grade);	
+		WeaponInventory.Add(newWeapon);
+
+		WeaponInventory[curSlot].WeaponObj.setActive(false);
+
+		
+	}
+
+	public void FullAddWeapon(BaseWeaponCon Weapon, WeaponGrade Grade)
+	{
+		BaseWeaponCon curSlotWeapon = WeaponInventory[curSlot];
+		
+		GameObject fallItem =  Instantiate(FallWeapon, transform.position, Quaternion.identity);
+		fallItem.getcomponent<IamItem>().enabled = true;
+		fallItem.getcomponent<Collider2D>().enabled = true;
+
+		WeaponInventory.RemoveAt(curslot);
+		Destroy(curSlotWeapon.gameObject);
+
+		AddWeapon(Weapon,Grade);
+	}
+
+	public void WeaonSetParent(GameObject weaponObj, Transform parent)
+	{
+		Vector3 = weaponObj.transform.localScale;
+		
+		weaponObj.transform.SetParent(parent);
+
+		weaponObj.transform.localScale = localScale;
+           	weaponObj.transform.localPosition = Vector3.zero;
+            	weaponObj.transform.localRotation = Quaternion.identity;
+	}
+		
+
+}
+
+
+
+		
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
