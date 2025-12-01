@@ -1,0 +1,149 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class MyInventory : MonoBehaviour
+{
+    public static MyInventory instance;
+
+    public BaseWeaponControl newWeapon;
+    public TestGunData grade;
+
+    public List<WeaponItem> myInventory = new List<WeaponItem>(4)
+    {
+        
+    };
+
+    
+    
+
+    [System.Serializable]
+    public class WeaponItem
+    {
+        public BaseWeaponControl Weapon;
+        public TestGunData Grade;
+
+        public WeaponItem(BaseWeaponControl weapon, TestGunData grade)
+        {
+            Weapon = weapon;
+            Grade = grade;
+        }
+    }
+    
+    public int currentSlot = 0;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+    }
+
+    public void QuikSlot(InputAction.CallbackContext context)
+    {
+        if(context.started)
+        {
+            foreach (var item in myInventory) 
+            {
+                item.Weapon.weaponObj.SetActive(false);
+            }
+
+            currentSlot = Mathf.Clamp((int)context.ReadValue<float>(), 0, myInventory.Count - 1); 
+
+            myInventory[currentSlot].Weapon.weaponObj.SetActive(true);
+            
+            WeaponCon.instance.thisWeapon = myInventory[currentSlot].Weapon.myWeaponScript;
+            WeaponCon.instance.WeaponSpriteChange();
+
+
+        }
+
+
+    }
+
+    public void GetWeapon(InputAction.CallbackContext context) 
+    {
+        if(context.started)
+        {   
+            if(newWeapon == null) return;
+            Vector3 localScale = newWeapon.weaponObj.transform.localScale;
+
+            if (myInventory.Count < 4)
+            {
+                AddWeapon(newWeapon, newWeaponGrade);
+            }
+
+            else
+            {
+                FallAndAddWeapon(newWeapon, newWeaponGrade);
+            }
+
+            newWeaponSetting(localScale);
+
+            foreach (var item in myInventory)
+            {
+                item.Weapon.weaponObj.SetActive(item == myInventory[currentSlot]);
+            }
+
+        }
+    }
+
+    public void AddWeapon(BaseWeaponControl weapon, WeaponGrade grade)
+    {
+        WeaponItem newWeapon = new WeaponItem(weapon,grade);
+
+        myInventory.Add(newWeapon);
+        currentSlot = myInventory.Count - 1;
+    }
+
+    public void FallAndAddWeapon(BaseWeaponControl weapon, WeaponGrade grade)
+    {
+        BaseWeaponControl oldWeapon = myInventory[currentSlot].Weapon;
+
+        GameObject FallWeapon = Instantiate
+                                (
+                                    oldWeapon.gameObject,
+                                    weapon.gameObject.transform.position,
+                                    Quaternion.identity
+                                    
+                                );
+
+        FallWeapon.name = oldWeapon.name;
+
+        FallWeapon.GetComponent<BoxCollider2D>().enabled = true;
+        FallWeapon.GetComponent<IamItem>().enabled = true;
+        
+        Destroy(myInventory[currentSlot].Weapon.gameObject);
+        myInventory.RemoveAt(currentSlot);
+
+        AddWeapon(weapon,grade);
+
+
+    }
+
+    public void newWeaponSetting(Vector3 localScale)
+    {
+        newWeapon.transform.parent = PlayerCon.instance.GunPosition.transform;
+        newWeapon.myWeaponScript.myWeaponCon.fireWait = false;
+
+        newWeapon.transform.localScale = localScale;
+        newWeapon.transform.localPosition = Vector3.zero;
+        newWeapon.transform.localRotation = Quaternion.identity;
+
+        WeaponCon.instance.thisWeapon = newWeapon.myWeaponScript;
+        WeaponCon.instance.WeaponSpriteChange();
+    }
+
+
+
+
+}
