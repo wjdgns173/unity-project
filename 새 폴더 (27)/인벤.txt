@@ -118,9 +118,9 @@ public class MyInventory : MonoBehaviour
                                 );
 
         FallWeapon.name = oldWeapon.name;
-
-        FallWeapon.GetComponent<BoxCollider2D>().enabled = true;
         FallWeapon.GetComponent<IamItem>().enabled = true;
+        FallWeapon.GetComponent<BoxCollider2D>().enabled = true;
+        
         
         Destroy(myInventory[currentSlot].Weapon.gameObject);
         myInventory.RemoveAt(currentSlot);
